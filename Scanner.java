@@ -127,7 +127,9 @@ public class Scanner
     }
     
     /**
-     * 
+     * checks if the inputted character is an operator
+     * @param s the character being evaluated
+     * @return true if it is an operator; otherwise, false
      */
     public static boolean isOperator(char s)
     {
@@ -135,6 +137,72 @@ public class Scanner
             || s == '(' || s == ')';
     }
     
+    /**
+     * Scans a number by iterating through all the inputs.
+     * Reg ex: (digit)(digit)*
+     * 
+     * @throws ScanErrorException if not a digit
+     */
+    private String scanNumber()
+    {
+    	//test for first number
+    	String num = "";
+    	if (isDigit(currentChar))
+    	{
+    		num += currentChar;   	
+    		if (hasNext())
+    			eat(currentChar);
+    		else
+    			return num;
+    	}
+    	else
+    		throw new ScanErrorException("Can't find a number");
+    	
+    	//read the rest of the digits
+    	while (isDigit(currentChar))
+    	{
+    		num += currentChar;
+    		if (hasNext())
+    			eat(currentChar);
+    		else
+    			return num;
+    	}
+    	return num;
+    }
+    
+    /**
+     * Scans identifier by iterating through inputs
+     * reg ex: (letter)(letter | digit)*
+     * 
+     * @throws ScanErroeException if not a digit
+     */
+    private String scanIdentifier()
+    {
+    	//first letter
+    	String id = "";
+    	if (isLetter(currentChar))
+    	{
+    		id += currentChar;
+    		if (hasNext())
+    			eat(currentChar);
+    		else
+    			return id;
+    	}
+    	else
+    		throw new ScanErrorException("Not valid identifier - must start with letter");
+    	
+    	//rest of the identifier
+    	while (isLetter(currentChar))
+    	{
+    		id += currentChar;
+    		if (hasNext())
+    			eat(currentChar);
+    		else
+    			return id;
+    	}
+    	return id;
+    }
+ 
     /**
      * Method: nextToken
      * @return

@@ -1,4 +1,4 @@
 # CompilersAndInterpreters22
 Code from compilers as a senior at Harker
 
-will be updated once stuff starts happening
+current status - up to scanIdentifier in Lab 1

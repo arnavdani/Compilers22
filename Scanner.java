@@ -38,9 +38,9 @@ public class Scanner
      */
     public Scanner(String inString)
     {
-        in = new BufferedReader(new StringReader(inString));
-        eof = false;
-        getNextChar();
+	        in = new BufferedReader(new StringReader(inString));
+	        eof = false;
+	        getNextChar();
     }
     
     /**
@@ -73,7 +73,6 @@ public class Scanner
     
     /**
      * Checks if the input string has a next character
-     * 
      * @return true if not at end of file; otherwise, false
      */
     public boolean hasNext()
@@ -174,7 +173,7 @@ public class Scanner
      * Scans identifier by iterating through inputs
      * reg ex: (letter)(letter | digit)*
      * 
-     * @throws ScanErroeException if not a digit
+     * @throws ScanErrorException if not a digit
      */
     private String scanIdentifier()
     {
@@ -202,14 +201,60 @@ public class Scanner
     	}
     	return id;
     }
- 
+    
+    /**
+     * Scans operators by iterating through inputs
+     * reg ex: (OP)*
+     * 
+     * @throws ScanErrorException if not an operator
+     */
+    public String scanOperator()
+    {
+    	//first op
+    	String op = "";
+    	if (isOperator(currentChar))
+    	{
+    		op += currentChaar;
+    		if (hasNext())
+    			eat(currentChar);
+    		else
+    			return op;
+    	}
+    	else
+    		throw new ScanErrorException("Not valid operator");
+    	
+    	//rest of the operator
+    	while (isOperator(currentChar))
+    	{
+    		op += currentChar;
+    		if (hasNext())							
+    			eat(currentChar);
+    		else
+    			return op;
+    	}
+    	return op;
+    }
+    
     /**
      * Method: nextToken
      * @return
      */
     public String nextToken() throws ScanErrorException
     {
-
-        
+    	String token = "";
+    	if(hasNext)
+    	{
+    		if (isLetter(currentChar))
+    			token = scanIdentifier();
+    		else if(isDigit(currentChar))
+    			token = scanNumber();
+    		else if(isOperator())
+    			token = scanOperator();
+    		else
+    			throw new ScanErrorException("No characters recogized");
+    	}
+    	
+    	
+    	return token;
     }    
 }

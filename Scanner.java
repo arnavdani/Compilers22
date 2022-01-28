@@ -1,4 +1,5 @@
-
+package scanner;
+import java.io.IOException;
 import java.io.*;
 
 /**
@@ -58,11 +59,10 @@ public class Scanner
     		currentChar = (char) i;
     		
     	}
-    	catch
+    	catch (IOException e)
     	{
-    		if (e instanceof IOException) {
                 System.out.println("IOException Error");
-                e.printStackTrace();
+                e.printStackTrace();            
     	}
     	finally
     	{
@@ -87,11 +87,11 @@ public class Scanner
      */
     private void eat(char expected) throws ScanErrorException
     {
-        if (currentChar = expected)
+        if (currentChar == expected)
         	getNextChar();
         else
         {
-        	Throw new ScanErrorException("Illegal Character: expected " + expected + " and got " + currentChar);
+        	throw new ScanErrorException("Illegal Character: expected " + expected + " and got " + currentChar);
         }
     }
     
@@ -142,7 +142,7 @@ public class Scanner
      * 
      * @throws ScanErrorException if not a digit
      */
-    private String scanNumber()
+    private String scanNumber() throws ScanErrorException
     {
     	//test for first number
     	String num = "";
@@ -175,7 +175,7 @@ public class Scanner
      * 
      * @throws ScanErrorException if not a digit
      */
-    private String scanIdentifier()
+    private String scanIdentifier() throws ScanErrorException
     {
     	//first letter
     	String id = "";
@@ -208,13 +208,13 @@ public class Scanner
      * 
      * @throws ScanErrorException if not an operator
      */
-    public String scanOperator()
+    public String scanOperator() throws ScanErrorException
     {
     	//first op
     	String op = "";
     	if (isOperator(currentChar))
     	{
-    		op += currentChaar;
+    		op += currentChar;
     		if (hasNext())
     			eat(currentChar);
     		else
@@ -242,13 +242,13 @@ public class Scanner
     public String nextToken() throws ScanErrorException
     {
     	String token = "";
-    	if(hasNext)
+    	if(hasNext())
     	{
     		if (isLetter(currentChar))
     			token = scanIdentifier();
     		else if(isDigit(currentChar))
     			token = scanNumber();
-    		else if(isOperator())
+    		else if(isOperator(currentChar))
     			token = scanOperator();
     		else
     			throw new ScanErrorException("No characters recogized");

@@ -4,8 +4,8 @@ package scanner;
 /**
  * subclass of exception used to throw error for the scanner
  *
- * @author arnav
- * @version 1-26-22
+ * @author Arnav Dani
+ * @version 1-31-22
  */
 public class ScanErrorException extends Exception
 {

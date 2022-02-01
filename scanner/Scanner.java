@@ -5,7 +5,7 @@ import java.io.*;
 /**
  * Scanner is a simple scanner for Compilers and Interpreters (2014-2015) lab exercise 1
  * @author Arnav Dani
- * @version 1-31-22
+ * @version 2-1-22
  *  
  * The scanner takes in an input stream of characters and
  * classifies them into tokens of digits, letters, and operators
@@ -69,8 +69,7 @@ public class Scanner
     		if (i == -1)
     			eof = true;
     		
-    		currentChar = (char) i;
-    		
+    		currentChar = (char) i;	
     	}
     	catch (IOException e)
     	{
@@ -328,7 +327,6 @@ public class Scanner
     	eat(currentChar);
     }
     
-    
     /**
      * Parses through the file, determines the type of token, and returns the token
      * Removes in line comments in the code and denotes end of line and end of file
@@ -349,15 +347,17 @@ public class Scanner
     		
     		if(isOperator(currentChar))
     		{
+    			//comment support
     			if (currentChar == '/')
     			{
     				eat(currentChar);
     				if (currentChar == '/')
     				{
-    					scanILComments();
+    					scanILComments(); //removes comments
     				}
-    				else
-    					return "/";
+    				else   				
+    					return "/"; //division sign
+    				
     			}
     			
     			if (currentChar != '/' && isOperator(currentChar))

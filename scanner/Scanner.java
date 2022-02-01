@@ -3,7 +3,8 @@ import java.io.IOException;
 import java.io.*;
 
 /**
- * Scanner is a simple scanner for Compilers and Interpreters (2014-2015) lab exercise 1
+ * Scanner is a simple scanner for Compilers and Interpreters 
+ * (2014-2015) lab exercise 1
  * @author Arnav Dani
  * @version 2-1-22
  *  
@@ -18,7 +19,7 @@ public class Scanner
     private BufferedReader in;
     private char currentChar;
     private boolean eof;
-    	
+    
     /**
      * Scanner constructor for construction of a scanner that 
      * uses an InputStream object for input.
@@ -48,9 +49,9 @@ public class Scanner
      */
     public Scanner(String inString)
     {
-	        in = new BufferedReader(new StringReader(inString));
-	        eof = false;
-	        getNextChar();
+    	in = new BufferedReader(new StringReader(inString));
+	    eof = false;
+	    getNextChar();
     }
     
     /**
@@ -58,7 +59,6 @@ public class Scanner
      * 
      * @precondition reader file is not null
      * @postcondition currentChar has the current char stored
-     * @throws exception if character can not be found
      */
     private void getNextChar()
     {
@@ -72,8 +72,8 @@ public class Scanner
     	}
     	catch (IOException e)
     	{
-                System.out.println("IOException Error");
-                e.printStackTrace();            
+            System.out.println("IOException Error");
+            e.printStackTrace();            
     	}
     }
     
@@ -96,7 +96,7 @@ public class Scanner
      * @precondition currentChar is not null
      * @postcondition current = expected is verified or error is thrown
      * @param expected - expected character in the current position
-     * @throws ScanErrorException if expected does not match current
+     * @exception ScanErrorException if expected does not match current
      */
     private void eat(char expected) throws ScanErrorException
     {
@@ -104,7 +104,8 @@ public class Scanner
         	getNextChar();
         else
         {
-        	throw new ScanErrorException("Illegal Character: expected " + expected + " and got " + currentChar);
+        	throw new ScanErrorException("Illegal Character: expected " + expected + 
+        								" and got " + currentChar);
         }
     }
     
@@ -168,7 +169,7 @@ public class Scanner
      * :=, <=, >=, ==, <>
      * @precondition s is not null
      * @postcondition a boolean is returned describing the input char
-     * @param s
+     * @param s the character being evaluated
      * @return true if is an operator that can be used consecutively;
      * 			otherwise, false
      */
@@ -211,7 +212,7 @@ public class Scanner
      * 
      * @precondition the file is loaded and is being iterated through
      * @postcondition returns string and parses n characters in the file
-     * @throws ScanErrorException if not a digit
+     * @exception ScanErrorException if not a digit
      */
     private String scanNumber() throws ScanErrorException
     {
@@ -246,7 +247,7 @@ public class Scanner
      * 
      * @precondition the file is loaded and being parsed through
      * @postcondition returns identifier and parses through more characters in the file
-     * @throws ScanErrorException if not a digit
+     * @exception ScanErrorException if not a digit
      */
     private String scanIdentifier() throws ScanErrorException
     {
@@ -281,7 +282,7 @@ public class Scanner
      * 
      * @precondition file is loaded and being parsed through
      * @postcondition returns operator and parses characters through the file
-     * @throws ScanErrorException if not an operator
+     * @exception ScanErrorException if not an operator
      */
     private String scanOperator() throws ScanErrorException
     {
@@ -315,7 +316,7 @@ public class Scanner
      * 
      * @precondition token before was "//" to start a comment
      * @postcondition the rest of the line is eaten and reading resumes on the next line
-     * @throws ScanErrorException
+     * @exception ScanErrorException
      */
     private void scanILComments() throws ScanErrorException
     {
@@ -332,7 +333,7 @@ public class Scanner
      * 
      * @precondition the file is loaded
      * @postcondition the full file is parsed through and all the tokens are returns
-     * @return
+     * @return String of the next token
      */
     public String nextToken() throws ScanErrorException
     {
@@ -355,8 +356,7 @@ public class Scanner
     					scanILComments(); //removes comments
     				}
     				else   				
-    					return "/"; //division sign
-    				
+    					return "/"; //division sign	
     			}
     			
     			else if (isOperator(currentChar))
@@ -372,35 +372,36 @@ public class Scanner
     			return token;
     		}
     			
-    		else if(isDigit(currentChar))
+    		else if (isDigit(currentChar))
     		{
     			token = scanNumber();
     			return token;
     		}
     		
-    		else if(isAtEndofFile(currentChar))
+    		else if (isAtEndofFile(currentChar))
     		{
-    			token = "EOF";
+    			token = "END";
     			eof = true;
     		}
     		
-    		else if(isAtEndOfLine(currentChar))
+    		else if (isAtEndOfLine(currentChar))
     		{
     			token = "EOL";
-    			eat(currentChar);
+    			eat(currentChar);	
     		}
-    	}
-    	
-    	if (token != "" && token.compareTo("//") != 0)
-    	{
-    		return token;
+    		
+    		if (!token.equals("") && token.compareTo("//") != 0)
+        	{
+        		return token;
+        	}
+        	else
+        	{
+        		System.out.println("errchar:" + currentChar);
+        		throw new ScanErrorException(currentChar + " not recogized"); 	
+        	}
     	}
     	else
-    	{
-    		System.out.println("errchar:" + currentChar);
-    		throw new ScanErrorException(currentChar + " not recogized"); 		
-    		
-    	}
+    		return "";
 			
     }    
 }

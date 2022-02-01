@@ -9,7 +9,6 @@ WHILE x <= 10 DO
 BEGIN
 WRITELN(square(x));
 x := x + 1;
-x / 5 - 3 //test comment
 END;
 END;
 .

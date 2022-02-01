@@ -350,7 +350,8 @@ public class Scanner
     			//comment support
     			if (currentChar == '/')
     			{
-    				eat(currentChar);
+    				if (hasNext())
+    					eat(currentChar);
     				if (currentChar == '/')
     				{
     					scanILComments(); //removes comments

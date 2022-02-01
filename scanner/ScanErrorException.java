@@ -7,6 +7,7 @@ package scanner;
  * @author Arnav Dani
  * @version 1-31-22
  */
+
 public class ScanErrorException extends Exception
 {
     /**

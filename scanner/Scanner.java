@@ -10,9 +10,8 @@ import java.io.*;
  * The scanner takes in an input stream of characters and
  * classifies them into tokens of digits, letters, and operators
  * 
- * it finally outputs those individual tokens that are used later
+ * The main method finally outputs those individual tokens that are used later
  * in the compiling process.
- *
  */
 public class Scanner
 {
@@ -360,7 +359,7 @@ public class Scanner
     				
     			}
     			
-    			if (currentChar != '/' && isOperator(currentChar))
+    			else if (isOperator(currentChar))
     			{
     				token = scanOperator();
     				return token;

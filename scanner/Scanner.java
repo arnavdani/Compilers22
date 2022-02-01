@@ -5,7 +5,7 @@ import java.io.*;
 /**
  * Scanner is a simple scanner for Compilers and Interpreters (2014-2015) lab exercise 1
  * @author Arnav Dani
- * @version 1-28-22
+ * @version 1-31-22
  *  
  * The scanner takes in an input stream of characters and
  * classifies them into tokens of digits, letters, and operators
@@ -139,6 +139,8 @@ public class Scanner
     /**
      * checks if the inputted character is a space
      * 
+     * @precondition s is not null
+     * @postcondition a boolean is returned describing the input char
      * @param s the character being evaluated
      * @return true if character is a space, tab, new line; otherwise, return false
      */
@@ -150,6 +152,8 @@ public class Scanner
     /**
      * checks if the inputted character is an operator
      * 
+     * @precondition s is not null
+     * @postcondition a boolean is returned describing the input char
      * @param s the character being evaluated
      * @return true if it is an operator; otherwise, false
      */
@@ -164,17 +168,23 @@ public class Scanner
      * that can be a 2 character operator
      * 
      * :=, <=, >=, ==, <>
+     * @precondition s is not null
+     * @postcondition a boolean is returned describing the input char
      * @param s
-     * @return
+     * @return true if is an operator that can be used consecutively;
+     * 			otherwise, false
      */
     public static boolean isDuplOperator(char s)
     {
-    	return s == '=' || s == ':' || s == '<' || s == '>' || s == '/';
+    	return s == '=' || s == ':' || s == '<' || s == '>';
     }
     
     /**
      * checks if at the end of the file
      * by checking if current char is a period
+     * 
+     * @precondition s is not null
+     * @postcondition a boolean is returned describing whether at end of file
      * @param s the character being evaluated
      * @return true if it is a period; otherwise false
      */
@@ -186,6 +196,9 @@ public class Scanner
     /**
      * checks if at the end of a statement
      * currently a semicolon signifies the end of a statement
+     * 
+     * @precondition s is not null
+     * @postcondition
      * @param s the character being evaluated
      * @return true if s is a semicolon; otherwise, false
      */
@@ -198,6 +211,8 @@ public class Scanner
      * Scans a number by iterating through all the inputs.
      * Reg ex: (digit)(digit)*
      * 
+     * @precondition the file is loaded and is being iterated through
+     * @postcondition returns string and parses n characters in the file
      * @throws ScanErrorException if not a digit
      */
     private String scanNumber() throws ScanErrorException
@@ -231,6 +246,8 @@ public class Scanner
      * Scans identifier by iterating through inputs
      * reg ex: (letter)(letter | digit)*
      * 
+     * @precondition the file is loaded and being parsed through
+     * @postcondition returns identifier and parses through more characters in the file
      * @throws ScanErrorException if not a digit
      */
     private String scanIdentifier() throws ScanErrorException
@@ -262,8 +279,10 @@ public class Scanner
     
     /**
      * Scans operators by iterating through inputs
-     * reg ex: (OP)*
+     * reg ex: (OP)(DuplOp)*
      * 
+     * @precondition file is loaded and being parsed through
+     * @postcondition returns operator and parses characters through the file
      * @throws ScanErrorException if not an operator
      */
     private String scanOperator() throws ScanErrorException
@@ -281,67 +300,88 @@ public class Scanner
     	else
     		throw new ScanErrorException("Not valid operator");
     	
-    	//rest of the operator
     	while (isDuplOperator(currentChar))
     	{
     		op += currentChar;
-    		if (hasNext())							
+    		if (hasNext())
     			eat(currentChar);
     		else
     			return op;
     	}
+    	
     	return op;
+    }
+    
+    /**
+     * Scans an in line comment by eating every character for the rest of the line
+     * 
+     * @precondition token before was "//" to start a comment
+     * @postcondition the rest of the line is eaten and reading resumes on the next line
+     * @throws ScanErrorException
+     */
+    private void scanILComments() throws ScanErrorException
+    {
+    	while ((currentChar != '\n') && hasNext())
+    	{
+    		eat(currentChar);
+    	}
+    	eat(currentChar);
     }
     
     
     /**
-     * Method: nextToken
+     * Parses through the file, determines the type of token, and returns the token
+     * Removes in line comments in the code and denotes end of line and end of file
+     * 
+     * @precondition the file is loaded
+     * @postcondition the full file is parsed through and all the tokens are returns
      * @return
      */
     public String nextToken() throws ScanErrorException
     {
     	String token = "";
     	if(hasNext())
-    	{
+    	{	
     		while (isWhiteSpace(currentChar))
     		{
     			eat(currentChar);		
-    		}		
+    		}
+    		
+    		if(isOperator(currentChar))
+    		{
+    			if (currentChar == '/')
+    			{
+    				eat(currentChar);
+    				if (currentChar == '/')
+    				{
+    					scanILComments();
+    				}
+    				else
+    					return "/";
+    			}
+    			
+    			if (currentChar != '/' && isOperator(currentChar))
+    			{
+    				token = scanOperator();
+    				return token;
+    			}
+    		}
     		
     		if (isLetter(currentChar))
     		{
     			token = scanIdentifier();
     			return token;
-    			//System.out.println(token);
     		}
     			
     		else if(isDigit(currentChar))
     		{
     			token = scanNumber();
     			return token;
-    			//System.out.println(token);
-    		}
-    			
-    		else if(isOperator(currentChar))
-    		{
-    			token = scanOperator();
-    			
-    			//comment support
-    			if (token == "//")
-    			{
-    				while(currentChar != '\n' && hasNext())
-    					eat(currentChar);
-    				
-    				token = "";
-    			}
-    			
-    			return token;
-    			//System.out.println(token);
     		}
     		
     		else if(isAtEndofFile(currentChar))
     		{
-    			token = "END";
+    			token = "EOF";
     			eof = true;
     		}
     		
@@ -350,10 +390,9 @@ public class Scanner
     			token = "EOL";
     			eat(currentChar);
     		}
-    		
     	}
     	
-    	if (token != "")
+    	if (token != "" && token.compareTo("//") != 0)
     	{
     		return token;
     	}

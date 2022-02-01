@@ -380,7 +380,7 @@ public class Scanner
     		
     		else if (isAtEndofFile(currentChar))
     		{
-    			token = "END";
+    			token = "EOF";
     			eof = true;
     		}
     		

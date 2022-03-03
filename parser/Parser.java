@@ -45,6 +45,43 @@ public class Parser
 		return num;
 	}
 	
+	public void parseStatement() throws ScanErrorException
+	{
+		int num = 0;
+		if (cur.equals("WRITELN"))
+		{
+			eat(cur);
+			eat("(");
+			num = parseNumber();
+			eat(")");
+			eat("EOL");
+			
+		}
+		System.out.println(num);
+	}
+	
+	public int parseFactor() throws ScanErrorException
+	{
+		int num; 
+		if (cur.equals("("))
+		{
+			eat(cur);
+			num = parseFactor();
+			eat(")");
+		}
+		
+		if (cur.equals("-"))
+		{
+			eat(cur);
+			return -parseFactor();
+		}
+		
+		else
+			return parseNumber();
+	}
+		
+		
+	
 	
 	
 

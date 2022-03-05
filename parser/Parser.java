@@ -40,6 +40,7 @@ public class Parser
 	*/
 	private int parseNumber() throws ScanErrorException
 	{
+		
 		int num = Integer.parseInt(cur);
 		eat(cur);
 		return num;
@@ -52,7 +53,7 @@ public class Parser
 		{
 			eat(cur);
 			eat("(");
-			num = parseNumber();
+			num = parseTerm();
 			eat(")");
 			eat("EOL");
 			
@@ -66,22 +67,41 @@ public class Parser
 		if (cur.equals("("))
 		{
 			eat(cur);
-			num = parseFactor();
+			num = parseTerm();
 			eat(")");
 		}
 		
-		if (cur.equals("-"))
+		else if (cur.equals("-"))
 		{
 			eat(cur);
-			return -parseFactor();
+			
+			num =  -parseFactor();
 		}
 		
 		else
-			return parseNumber();
+			num = parseNumber();
+		
+		return num;
 	}
-		
-		
 	
+	private int parseTerm() throws ScanErrorException
+	{
+		int num = parseFactor();
+		while (cur.equals("*") || cur.equals("/") )
+		{
+			if (cur.equals("*"))
+			{
+				eat("*");
+				num = num * parseFactor();
+			}
+			else if (cur.equals("/"))
+			{
+				eat("/");
+				num = num / parseFactor();
+			}
+		}
+	return num;
+	}
 	
 	
 

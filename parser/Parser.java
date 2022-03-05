@@ -53,12 +53,24 @@ public class Parser
 		{
 			eat(cur);
 			eat("(");
-			num = parseTerm();
+			num = parseExpression();
 			eat(")");
 			eat("EOL");
-			
+			System.out.println(num);			
 		}
-		System.out.println(num);
+		else if (cur.equals("BEGIN"))
+		{
+			eat("BEGIN");
+			while (!cur.equals("END"))
+			{
+				parseStatement();
+			}
+			eat("END");
+			eat("EOL");
+		}
+		
+		
+		
 	}
 	
 	public int parseFactor() throws ScanErrorException
@@ -67,7 +79,7 @@ public class Parser
 		if (cur.equals("("))
 		{
 			eat(cur);
-			num = parseTerm();
+			num = parseExpression();
 			eat(")");
 		}
 		
@@ -99,9 +111,30 @@ public class Parser
 				eat("/");
 				num = num / parseFactor();
 			}
-		}
-	return num;
+		}		
+		return num;
 	}
+	
+	private int parseExpression() throws ScanErrorException
+	{
+		int num = parseTerm();
+		while (cur.equals("+")|| cur.equals("-"))
+		{
+			if (cur.equals("+"))
+			{
+				eat("+");
+				num = num + parseTerm();
+			}
+			else if (cur.equals("-"))
+			{
+				eat("-");
+				num = num - parseTerm();
+			}
+		}
+		return num;
+	}
+	
+	
 	
 	
 

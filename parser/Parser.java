@@ -1,16 +1,25 @@
 package parser;
 import scanner.*;
+import java.util.Map;
+import java.util.HashMap;
 
 
 public class Parser 
 {
 	private Scanner sc;
-	String cur;
+	private String cur;
+	private Map<String, Integer> vars;
 	
+	/**
+	 * 
+	 * @param scanner
+	 * @throws ScanErrorException
+	 */
 	public Parser(Scanner scanner) throws ScanErrorException
 	{
 		sc = scanner;
 		cur = sc.nextToken();
+		vars = new HashMap<String, Integer>();
 	}
 	
 	/** 
@@ -31,21 +40,21 @@ public class Parser
 	}
 	
 	/**
-	* Your comments documenting this method according to the
-	* style guide
-	* precondition: current token is an integer
-	* postcondition: number token has been eaten
-	* @return the value of the parsed integer
-	 * @throws ScanErrorException 
-	*/
+	 * 
+	 * @return
+	 * @throws ScanErrorException
+	 */
 	private int parseNumber() throws ScanErrorException
-	{
-		
+	{	
 		int num = Integer.parseInt(cur);
 		eat(cur);
 		return num;
 	}
 	
+	/**
+	 * 
+	 * @throws ScanErrorException
+	 */
 	public void parseStatement() throws ScanErrorException
 	{
 		int num = 0;
@@ -68,11 +77,22 @@ public class Parser
 			eat("END");
 			eat("EOL");
 		}
-		
-		
-		
+		else
+		{
+			String id = cur;
+			eat(cur);
+			eat(":=");
+			num = parseExpression();
+			eat("EOL");
+			vars.put(id, num);	
+		}
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws ScanErrorException
+	 */
 	public int parseFactor() throws ScanErrorException
 	{
 		int num; 
@@ -86,8 +106,13 @@ public class Parser
 		else if (cur.equals("-"))
 		{
 			eat(cur);
-			
-			num =  -parseFactor();
+			num = -parseFactor();
+		}
+		
+		else if (vars.containsKey(cur))
+		{
+			num = vars.get(cur);
+			eat(cur);
 		}
 		
 		else
@@ -96,6 +121,11 @@ public class Parser
 		return num;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws ScanErrorException
+	 */
 	private int parseTerm() throws ScanErrorException
 	{
 		int num = parseFactor();
@@ -115,6 +145,11 @@ public class Parser
 		return num;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws ScanErrorException
+	 */
 	private int parseExpression() throws ScanErrorException
 	{
 		int num = parseTerm();
@@ -133,9 +168,4 @@ public class Parser
 		}
 		return num;
 	}
-	
-	
-	
-	
-
 }

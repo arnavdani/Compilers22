@@ -3,15 +3,20 @@ package parser;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import scanner.*;
 
-import scanner.ScanErrorException;
-import scanner.Scanner;
-
-public class ParserTester 
+/**
+ * Tests the Parser class against a passed in
+ * text file to ensure functionality
+ * @author Arnav Dani
+ * @version 3/6/22
+ *
+ */
+public class ParserTester
 {
 	/**
-	 * 
-	 * @param args
+	 * Tests the parser by making it parse a file
+	 * @param args not used
 	 * @throws FileNotFoundException
 	 * @throws ScanErrorException
 	 */

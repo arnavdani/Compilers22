@@ -188,7 +188,7 @@ public class Parser
 	private int parseExpression() throws ScanErrorException
 	{
 		int num = parseTerm();
-		while (cur.equals("+")|| cur.equals("-"))
+		while (cur.equals("+") || cur.equals("-"))
 		{
 			if (cur.equals("+"))
 			{

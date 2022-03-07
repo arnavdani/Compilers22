@@ -79,7 +79,7 @@ public class Parser
 	public void parseStatement() throws ScanErrorException
 	{
 		int num = 0;
-		if (cur.equals("WRITELN"))
+		while (cur.equals("WRITELN"))
 		{
 			eat(cur);
 			eat("(");
@@ -88,7 +88,7 @@ public class Parser
 			eat("EOL");
 			System.out.println(num);			
 		}
-		else if (cur.equals("BEGIN"))
+		if (cur.equals("BEGIN"))
 		{
 			eat("BEGIN");
 			while (!cur.equals("END"))
@@ -98,10 +98,11 @@ public class Parser
 			eat("END");
 			eat("EOL");
 		}
-		else
+		else if (!cur.equals("EOF") && !cur.equals("EOL") && !cur.equals("END"))
 		{
 			String id = cur;
 			eat(cur);
+			System.out.println(cur);
 			eat(":=");
 			num = parseExpression();
 			eat("EOL");

@@ -102,7 +102,6 @@ public class Parser
 		{
 			String id = cur;
 			eat(cur);
-			System.out.println(cur);
 			eat(":=");
 			num = parseExpression();
 			eat("EOL");

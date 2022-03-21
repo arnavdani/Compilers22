@@ -8,6 +8,7 @@ package scanner;
  * @version 1-31-22
  */
 
+@SuppressWarnings("serial")
 public class ScanErrorException extends Exception
 {
     /**

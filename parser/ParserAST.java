@@ -1,7 +1,12 @@
 package parser;
 import scanner.*;
 import java.util.Map;
+import ast.*;
+import ast.Number;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * The parser uses the stream of tokens returned by the scanner
@@ -11,7 +16,7 @@ import java.util.HashMap;
  * @author Arnav Dani
  * @version 3/5/22
  */
-public class Parser 
+public class ParserAST 
 {
 	private Scanner sc;
 	private String cur;
@@ -23,7 +28,7 @@ public class Parser
 	 * @param scanner the scanner that scans the input file
 	 * @throws ScanErrorException
 	 */
-	public Parser(Scanner scanner) throws ScanErrorException
+	public ParserAST(Scanner scanner) throws ScanErrorException
 	{
 		sc = scanner;
 		cur = sc.nextToken();
@@ -53,11 +58,11 @@ public class Parser
 	 * @return integer of the number in the token
 	 * @throws ScanErrorException
 	 */
-	private int parseNumber() throws ScanErrorException
+	private Number parseNumber() throws ScanErrorException
 	{	
 		int num = Integer.parseInt(cur);
 		eat(cur);
-		return num;
+		return new Number(num);
 	}
 	
 	/**
@@ -76,38 +81,40 @@ public class Parser
 	 * Statement is the highest level in the grammar
 	 * @throws ScanErrorException
 	 */
-	public void parseStatement() throws ScanErrorException
+	public Statement parseStatement() throws ScanErrorException
 	{
-		int num = 0;
-		while (cur.equals("WRITELN"))
+		Statement s = null;
+		if (cur.equals("WRITELN"))
 		{
 			eat(cur);
 			eat("(");
-			num = parseExpression();
+			Expression exp = parseExpression();
 			eat(")");
 			eat("EOL");
-			System.out.println(num);			
+			s = new Writeln(exp);			
 		}
 		if (cur.equals("BEGIN"))
 		{
 			eat("BEGIN");
+			List<Statement> statements = new ArrayList<Statement>();
 			while (!cur.equals("END"))
 			{
-				parseStatement();
+				statements.add(parseStatement());
 			}
 			eat("END");
 			eat("EOL");
+			s =  new Block(statements);
 		}
 		else if (!cur.equals("EOF") && !cur.equals("EOL") && !cur.equals("END"))
 		{
 			String id = cur;
 			eat(cur);
-			System.out.println(cur);
 			eat(":=");
-			num = parseExpression();
+			Assignment varAssign = new Assignment(id, parseExpression());
 			eat("EOL");
-			vars.put(id, num);	
+			s =  varAssign;
 		}
+		return s;
 	}
 	
 	/**
@@ -124,32 +131,32 @@ public class Parser
 	 * @return the integer value of the factor
 	 * @throws ScanErrorException
 	 */
-	public int parseFactor() throws ScanErrorException
+	public Expression parseFactor() throws ScanErrorException
 	{
-		int num; 
+		Expression exp;
 		if (cur.equals("("))
 		{
 			eat(cur);
-			num = parseExpression();
+			exp = parseExpression();
 			eat(")");
 		}
 		
 		else if (cur.equals("-"))
 		{
 			eat(cur);
-			num = -parseFactor();
+			exp = new BinOp("-", new Number(0),parseFactor());
 		}
 		
 		else if (vars.containsKey(cur))
 		{
-			num = vars.get(cur);
+			exp = new Number(vars.get(cur));
 			eat(cur);
 		}
 		
 		else
-			num = parseNumber();
+			exp = parseNumber();
 		
-		return num;
+		return exp;
 	}
 	
 	/**
@@ -158,23 +165,23 @@ public class Parser
 	 * @return the term parsed and evaluated
 	 * @throws ScanErrorException
 	 */
-	private int parseTerm() throws ScanErrorException
+	private Expression parseTerm() throws ScanErrorException
 	{
-		int num = parseFactor();
+		Expression e = parseFactor();
 		while (cur.equals("*") || cur.equals("/") )
 		{
 			if (cur.equals("*"))
 			{
 				eat("*");
-				num = num * parseFactor();
+				e = new BinOp("*", e, parseFactor());
 			}
 			else if (cur.equals("/"))
 			{
 				eat("/");
-				num = num / parseFactor();
+				e = new BinOp("/", e, parseFactor());
 			}
 		}		
-		return num;
+		return e;
 	}
 	
 	/**
@@ -186,22 +193,22 @@ public class Parser
 	 * @return the expression parsed and evaluated in correct order of OPS
 	 * @throws ScanErrorException
 	 */
-	private int parseExpression() throws ScanErrorException
+	private Expression parseExpression() throws ScanErrorException
 	{
-		int num = parseTerm();
+		Expression exp = parseTerm();
 		while (cur.equals("+") || cur.equals("-"))
 		{
 			if (cur.equals("+"))
 			{
 				eat("+");
-				num = num + parseTerm();
+				return new BinOp("+", exp, parseTerm());
 			}
 			else if (cur.equals("-"))
 			{
 				eat("-");
-				num = num - parseTerm();
+				return new BinOp("-", exp, parseTerm());
 			}
 		}
-		return num;
+		return exp;
 	}
 }

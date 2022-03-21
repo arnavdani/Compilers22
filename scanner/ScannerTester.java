@@ -18,7 +18,7 @@ public class ScannerTester
 	 */
 	public static void main(String[] args) throws ScanErrorException, IOException
 	{
-		Scanner sc = new Scanner(new FileInputStream(new File("./src/ScannerTestAdvanced.txt")));
+		Scanner sc = new Scanner(new FileInputStream(new File("./src/ParserTest5.txt")));
 		while (sc.hasNext())
 		{
 			System.out.println(sc.nextToken());

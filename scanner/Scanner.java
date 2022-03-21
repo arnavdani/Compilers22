@@ -342,7 +342,7 @@ public class Scanner
     	{	
     		while (isWhiteSpace(currentChar))
     		{
-    			eat(currentChar);		
+    			eat(currentChar);
     		}
     		
     		if(isOperator(currentChar))

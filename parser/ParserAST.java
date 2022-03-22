@@ -84,14 +84,14 @@ public class ParserAST
 	public Statement parseStatement() throws ScanErrorException
 	{
 		Statement s = null;
-		if (cur.equals("WRITELN"))
+		while (cur.equals("WRITELN"))
 		{
 			eat(cur);
 			eat("(");
 			Expression exp = parseExpression();
 			eat(")");
 			eat("EOL");
-			s = new Writeln(exp);			
+			s = new Writeln(exp);
 		}
 		if (cur.equals("BEGIN"))
 		{

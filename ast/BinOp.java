@@ -18,8 +18,16 @@ public class BinOp extends Expression
 	@Override
 	public int eval(Environment env) 
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		if (op.equals("*"))
+			return e1.eval(env) * e2.eval(env);
+		if (op.equals("/"))
+			return e1.eval(env) / e2.eval(env);
+		if (op.equals("+"))
+			return e1.eval(env) + e2.eval(env);
+		if (op.equals("-"))
+			return e1.eval(env) - e2.eval(env);
+		else
+			return e1.eval(env) % e2.eval(env);	
 	}
 
 }

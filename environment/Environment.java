@@ -6,12 +6,11 @@ import java.util.Scanner;
 public class Environment 
 {
 	private Map<String, Integer> variables;
-	private Environment env;
+
 	
-	public Environment(Environment e)
+	public Environment()
 	{
 		variables = new HashMap<>();
-		env = e;
 	}
 	
 	public void setVariable(String variable, int value)

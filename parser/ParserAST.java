@@ -1,26 +1,22 @@
 package parser;
 import scanner.*;
-import java.util.Map;
 import ast.*;
 import ast.Number;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
  * The parser uses the stream of tokens returned by the scanner
- * to execute simple commands and resolve mathematical expressions
+ * and an abstract syntax tree to execute blocks of code
  * 
- * Can do + - * /, assign variables, and process BEGIN and END tokens
+ * Can do + - * /, assign variables, BEGIN END blocks, if and while loops
  * @author Arnav Dani
- * @version 3/5/22
+ * @version 3/22/22
  */
 public class ParserAST 
 {
 	private Scanner sc;
 	private String cur;
-	private Map<String, Integer> vars;
 	
 	/**
 	 * Constructor, creates a scanner to scan the input file
@@ -32,7 +28,6 @@ public class ParserAST
 	{
 		sc = scanner;
 		cur = sc.nextToken();
-		vars = new HashMap<String, Integer>();
 	}
 	
 	/** 
@@ -55,7 +50,7 @@ public class ParserAST
 	/**
 	 * Parses a number by turning the token to an integer
 	 * Number is the most base level unit in the grammar
-	 * @return integer of the number in the token
+	 * @return Number of the number in the token
 	 * @throws ScanErrorException
 	 */
 	private Number parseNumber() throws ScanErrorException
@@ -67,18 +62,17 @@ public class ParserAST
 	
 	/**
 	 * Parses a full statement using top down recursive descent
-	 * Works with BEGIN and END tokens and parses every expression between the two
-	 * Can store variables using a HashMap and evaluate expressions with variables
-	 * 		in them
-	 * 
-	 * 
-	 * Works with WRITELN token and parses the statement inside ()
+	 * Works with (), BEGIN END blocks, assignment, while and if conditionals
 	 * 
 	 * Follows the defined grammar
-	 * stmt -> WRITELN ( expr ) | BEGIN stmts END | id := expr
+	 * stmt -> WRITELN ( expr ) ; | BEGIN stmts END ; | id := expr ;| 
+	 * IF cond THEN stmt | WHILE cond DO stmt
+	 * 
 	 * stmts -> stmts stmt | e
 	 * 
 	 * Statement is the highest level in the grammar
+	 * 
+	 * @return Statement object with the final parsed statement
 	 * @throws ScanErrorException
 	 */
 	public Statement parseStatement() throws ScanErrorException
@@ -143,7 +137,8 @@ public class ParserAST
 			eat("EOL");
 			return  varAssign;
 		}
-		return null;
+		else
+			return null;
 	}
 	
 	/**
@@ -157,7 +152,7 @@ public class ParserAST
 	 * 
 	 * follows the grammar 
 	 * factor -> ( expr ) | - factor | num | id
-	 * @return the integer value of the factor
+	 * @return parsed Expression object evaluating the factor
 	 * @throws ScanErrorException
 	 */
 	public Expression parseFactor() throws ScanErrorException
@@ -187,16 +182,14 @@ public class ParserAST
 				exp = new Variable(cur);
 				eat(cur);
 			}
-			
 		}
-		
 		return exp;
 	}
 	
 	/**
 	 * parseTerm is at an intermediate level in the grammar
 	 * and parses multiplication and division operations
-	 * @return the term parsed and evaluated
+	 * @return parsed Expression object evaluating the term
 	 * @throws ScanErrorException
 	 */
 	private Expression parseTerm() throws ScanErrorException
@@ -224,7 +217,7 @@ public class ParserAST
 	 * 
 	 * Since multiplication and division are ahead in the order of operation,
 	 * parseExpression calls parseTerm to ensure those operations are done first
-	 * @return the expression parsed and evaluated in correct order of OPS
+	 * @return an Expression object parsed and evaluated in correct order of OPS
 	 * @throws ScanErrorException
 	 */
 	private Expression parseExpression() throws ScanErrorException

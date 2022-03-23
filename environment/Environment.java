@@ -15,11 +15,7 @@ public class Environment
 	
 	public void setVariable(String variable, int value)
 	{
-		if (!variables.containsKey(variable))
-		{
-			variables.put(variable, value);
-		}
-		
+		variables.put(variable, value);
 	}
 	
 	public int getVariable(String variable)

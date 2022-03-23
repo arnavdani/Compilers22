@@ -83,7 +83,6 @@ public class ParserAST
 	 */
 	public Statement parseStatement() throws ScanErrorException
 	{
-		Statement s = null;
 		while (cur.equals("WRITELN"))
 		{
 			eat(cur);
@@ -91,7 +90,7 @@ public class ParserAST
 			Expression exp = parseExpression();
 			eat(")");
 			eat("EOL");
-			s = new Writeln(exp);
+			return new Writeln(exp);
 		}
 		if (cur.equals("BEGIN"))
 		{
@@ -103,8 +102,38 @@ public class ParserAST
 			}
 			eat("END");
 			eat("EOL");
-			s =  new Block(statements);
+			return new Block(statements);
 		}
+		
+		if (cur.equals("IF"))
+		{
+			eat(cur);
+			Expression exp1 = parseExpression();
+			String relop = cur;
+			eat(cur);
+			Conditional condo = new Conditional(relop, exp1, parseExpression());
+			eat("THEN");
+			Statement s1 = parseStatement();
+			if(cur.equals("ELSE"))
+			{
+				eat(cur);
+				return new If(condo, s1, parseStatement());
+			}
+			else
+				return new If(condo, s1);
+		}
+		
+		if (cur.equals("WHILE"))
+		{
+			eat(cur);
+			Expression exp1 = parseExpression();
+			String relop = cur;
+			eat(cur);
+			Conditional condo = new Conditional(relop, exp1, parseExpression());
+			eat("DO");
+			return new While(condo, parseStatement());
+		}
+		
 		else if (!cur.equals("EOF") && !cur.equals("EOL") && !cur.equals("END"))
 		{
 			String id = cur;
@@ -112,9 +141,9 @@ public class ParserAST
 			eat(":=");
 			Assignment varAssign = new Assignment(id, parseExpression());
 			eat("EOL");
-			s =  varAssign;
+			return  varAssign;
 		}
-		return s;
+		return null;
 	}
 	
 	/**
@@ -147,14 +176,19 @@ public class ParserAST
 			exp = new BinOp("-", new Number(0),parseFactor());
 		}
 		
-		else if (vars.containsKey(cur))
-		{
-			exp = new Number(vars.get(cur));
-			eat(cur);
-		}
-		
 		else
-			exp = parseNumber();
+		{
+			try
+			{
+				exp = parseNumber();
+			}
+			catch (NumberFormatException n)
+			{
+				exp = new Variable(cur);
+				eat(cur);
+			}
+			
+		}
 		
 		return exp;
 	}

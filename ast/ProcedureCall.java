@@ -3,18 +3,36 @@ package ast;
 import environment.*;
 import java.util.*;
 
+/**
+ * ProcedureCall calls the procedure and executes the statement within it
+ * @author Arnav Dani
+ * @version 4/23/22
+ *
+ */
 public class ProcedureCall extends Expression
 {
 	String name;
 	List<Expression> expressions;
 	
+	/**
+	 * Constructor for ProcedureCall
+	 * @param n the name of the procedure
+	 * @param e expressions that represent parameters
+	 */
 	public ProcedureCall(String n, List<Expression> e)
 	{
 		name = n;
 		expressions = e;
 	}
 	
-	@Override
+	/**
+	 * Evaluates the procedure by acessing the declaration
+	 * 	from the parent env, evaluating all the parameters,
+	 * 	declaring all variables within the proper scope, and 
+	 * 	executing the statement block wthin the method to calculate
+	 * 		the final return of the procedure.
+	 * @return integer of the final return of the procedure
+	 */
 	public int eval(Environment e)
 	{
 		Environment par = e.getPar();

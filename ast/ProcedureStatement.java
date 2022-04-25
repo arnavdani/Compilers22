@@ -1,20 +1,39 @@
 package ast;
 
-
 import environment.*;
 import java.util.*;
 
+/**
+ * ProcedureStatement executes a procedure by followingt the same process
+ * 	as calling the procedure. The main difference is that the statement does
+ * 	not return a value while a ProcedureCall does
+ * @author Arnav Dani
+ * @version 4/24/22
+ *
+ */
 public class ProcedureStatement extends Statement
 {
 	private String name;
 	private List<Expression> expressions;
 	
+	/**
+	 * Constructor for ProcedureStatement
+	 * @param s the name of the procedure
+	 * @param exp a list of expressions to be used as parameters
+	 */
 	public ProcedureStatement(String s, List<Expression> exp)
 	{
 		name = s;
 		expressions = exp;
 	}
 	
+	/**
+	 * Executes the procedure by acessing the declaration
+	 * 	from the parent env, evaluating all the parameters,
+	 * 	declaring all variables within the proper scope, and 
+	 * 	executing the statement block wthin the method to calculate
+	 * 		the final return of the procedure.
+	 */
 	@Override
 	public void exec(Environment e)
 	{

@@ -9,9 +9,10 @@ import java.util.List;
  * The parser uses the stream of tokens returned by the scanner
  * and an abstract syntax tree to execute blocks of code
  * 
- * Can do + - * /, assign variables, BEGIN END blocks, if and while loops
+ * Can do + - * /, assign variables, BEGIN END blocks, if and while loops, 
+ * 	and procedure declaration, evaluatin, execution
  * @author Arnav Dani
- * @version 3/22/22
+ * @version 4/24/22
  */
 public class ParserAST 
 {
@@ -70,7 +71,7 @@ public class ParserAST
 	 * 
 	 * stmts -> stmts stmt | e
 	 * 
-	 * Statement is the highest level in the grammar
+	 * Statement is the 2nd highest level in the grammar
 	 * 
 	 * @return Statement object with the final parsed statement
 	 * @throws ScanErrorException
@@ -173,7 +174,10 @@ public class ParserAST
 	 * The factor is the 2nd lowest level in the grammar
 	 * 
 	 * follows the grammar 
-	 * factor -> ( expr ) | - factor | num | id
+	 * factor ->  ( expr ) | - factor | num | id ( maybeargs) | 
+	 * 			id maybeargs -> args | eps
+	 * 
+	 * args -> args , expr | expr
 	 * @return parsed Expression object evaluating the factor
 	 * @throws ScanErrorException
 	 */
@@ -278,6 +282,19 @@ public class ParserAST
 		return exp;
 	}
 	
+	/**
+	 * ParseProgram reads all the procedures and then the following statements
+	 * and uses the program object to store and execute the section of code
+	 * 
+	 * A Program represents all the code comprised of the lower level objects
+	 * Program is the highest level object in the grammar
+	 * 
+	 * Program -> PROCEDURE id ( maybeparms ) ; stmt program | 
+	 * 		stmt . maybeparms -> parms | eps
+	 * 
+	 * @return Program object to be executed/evaluated
+	 * @throws ScanErrorException
+	 */
 	public Program parseProgram() throws ScanErrorException
 	{
 		List<ProcedureDeclaration> procedures = new ArrayList<>();

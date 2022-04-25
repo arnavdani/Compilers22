@@ -10,7 +10,7 @@ import scanner.*;
  * Tests the Parser class against a passed in
  * text file to ensure functionality
  * @author Arnav Dani
- * @version 3/6/22
+ * @version 4/24/22
  *
  */
 public class ParserTester

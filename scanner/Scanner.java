@@ -158,7 +158,7 @@ public class Scanner
     public static boolean isOperator(char s)
     {
         return s == '=' || s == '+' || s == '-' || s == '*' || s == '/' || s == '%' 
-            || s == '(' || s == ')' || s == ':' || s == '<' || s == '>';
+            || s == '(' || s == ')' || s == ':' || s == '<' || s == '>' || s == ',';
     }
     
     /**

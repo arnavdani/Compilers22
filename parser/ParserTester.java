@@ -1,6 +1,4 @@
 package parser;
-
-import ast.Statement;
 import environment.Environment;
 
 import java.io.File;
@@ -25,11 +23,10 @@ public class ParserTester
 	 */
 	public static void main(String [] args) throws FileNotFoundException, ScanErrorException
 	{
-		Scanner sc = new Scanner(new FileInputStream(new File("./src/parserTest6.txt")));
+		Scanner sc = new Scanner(new FileInputStream(new File("./src/test8.txt")));
 		ParserAST p = new ParserAST(sc);
-		Statement s = p.parseStatement();
-		Environment env = new Environment();
-		s.exec(env);
+		Environment env = new Environment(null);
+		p.parseProgram().exec(env);
 	}
 
 }

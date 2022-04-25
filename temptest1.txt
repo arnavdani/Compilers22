@@ -1,0 +1,16 @@
+PROCEDURE Add(y,w,z);
+BEGIN
+	WRITELN(y);
+	WRITELN(w);
+	WRITELN(z);
+END;
+
+BEGIN
+	x := Add(4,3,2);
+	WRITELN(x);
+	
+END;
+.
+.
+.
+.

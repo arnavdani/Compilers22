@@ -77,6 +77,7 @@ public class ParserAST
 	 */
 	public Statement parseStatement() throws ScanErrorException
 	{
+		Statement returnStatement;
 		while (cur.equals("WRITELN"))
 		{
 			eat(cur);
@@ -132,10 +133,31 @@ public class ParserAST
 		{
 			String id = cur;
 			eat(cur);
-			eat(":=");
-			Assignment varAssign = new Assignment(id, parseExpression());
+			if (cur.equals(":="))
+			{
+				eat(":=");
+				Assignment varAssign = new Assignment(id, parseExpression());
+				returnStatement = varAssign;
+			}
+			else
+			{
+				eat("(");
+				List<Expression> variables = new ArrayList<>();
+				if (!cur.equals(")"))
+					variables.add(parseExpression());
+				
+				while (!cur.equals(")"))
+				{
+					eat(",");
+					variables.add(parseExpression());
+				}
+				eat(")");
+				returnStatement =  new ProcedureStatement(id, variables);
+
+			}
 			eat("EOL");
-			return  varAssign;
+			return returnStatement;
+			
 		}
 		else
 			return null;
@@ -179,8 +201,25 @@ public class ParserAST
 			}
 			catch (NumberFormatException n)
 			{
-				exp = new Variable(cur);
+				String c = cur;
+				
 				eat(cur);
+				
+				if (cur.equals("("))
+				{
+					eat("(");
+					List<Expression> variables = new ArrayList<>();
+					while (!cur.equals(")"))
+					{
+						variables.add(parseExpression());
+						if (cur.equals(","))
+							eat(",");
+					}
+					eat(")");
+					exp = new ProcedureCall(c, variables);
+				}
+				else
+					exp = new Variable(c);
 			}
 		}
 		return exp;
@@ -238,4 +277,31 @@ public class ParserAST
 		}
 		return exp;
 	}
+	
+	public Program parseProgram() throws ScanErrorException
+	{
+		List<ProcedureDeclaration> procedures = new ArrayList<>();
+		while (cur.equals("PROCEDURE"))
+		{
+			eat("PROCEDURE");
+			String c = cur;
+			eat(cur);
+			eat("(");
+			List<String> params = new ArrayList<>();
+			while (!cur.equals(")"))
+			{
+				params.add(cur);
+				eat(cur);
+				if (cur.equals(","))
+					eat(",");
+			}
+			eat(")");
+			eat("EOL");
+			Statement statement = parseStatement();
+			procedures.add(new ProcedureDeclaration(c, statement, params));
+		}
+		Statement statement = parseStatement();
+		return new Program(procedures, statement);
+	}
 }
+

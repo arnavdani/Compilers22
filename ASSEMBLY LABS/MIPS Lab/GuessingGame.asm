@@ -15,7 +15,8 @@ guess: .asciiz "Enter a guess\n"
 randomNum: 
 li $a1, 100  #sets range to 0-100
 li $v0, 42  #generates the random number.
-move $t0, $v0 #moves random number to t0
+syscall
+move $t0, $a0 #moves random number to t0
 syscall
 
 main:

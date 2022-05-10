@@ -1,4 +1,5 @@
 package ast;
+import emitter.Emitter;
 import environment.Environment;
 
 /**
@@ -81,6 +82,45 @@ public class Conditional extends Expression
 				var = 1;
 		}
 		return var;
+	}
+	
+	public void compile(Emitter e, String tlabel)
+	{
+		e1.compile(e);
+		e.emitPush("$v0");
+		e2.compile(e);
+		e.emitPop("$t1");
+		
+		if (op.equals("="))
+        {
+            e.emit("bne $t1, $v0, " + tlabel);
+        }
+        else if (op.equals("<>"))
+        {
+            e.emit("beq $t1, $v0, " + tlabel);
+        }
+        else if (op.equals("<"))
+        {
+            e.emit("bge $t1, $v0, " + tlabel);
+        }
+        else if (op.equals(">"))
+        {
+            e.emit("ble $t1, $v0, " + tlabel);
+        }
+        else if (op.equals("<="))
+        {
+            e.emit("bgt $t1, $v0, " + tlabel);
+        }
+        else if (op.equals(">="))
+        {
+            e.emit("blt $t1, $v0, " + tlabel);
+        }
+        else
+        {
+            throw new IllegalArgumentException("Operator not recognized.");
+        }
+        e.emit("#Conditional statement");
+		
 	}
 
 }

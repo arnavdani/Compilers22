@@ -1,4 +1,5 @@
 package ast;
+import emitter.Emitter;
 import environment.Environment;
 
 /**
@@ -31,5 +32,12 @@ public class Assignment extends Statement
 	public void exec(Environment env)
 	{
 		env.setVariable(var, e.eval(env));
+	}
+	
+	public void compile(Emitter em)
+	{
+		e.compile(em);
+		em.emit("la $t1 var" + var);
+		em.emit("sw $v0, ($t1) #move var" + var + " to $t0");
 	}
 }

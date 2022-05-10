@@ -1,4 +1,5 @@
 package ast;
+import emitter.Emitter;
 import environment.Environment;
 
 /**
@@ -66,6 +67,21 @@ public class If extends Statement
 			if (stmt2 != null)
 				stmt2.exec(env);
 		}
+		
+	}
+	
+	public void compile(Emitter e)
+	{
+		int i = e.nextLabelID();
+		condo.compile(e, "elseif" + i);
+		stmt1.compile(e);
+		e.emit("j endif" + i);
+		e.emit("elseif" + i + ":   #jump for else");
+		if (stmt2 != null)
+		{
+			stmt2.compile(e);
+		}
+		e.emit("endif" + i + ":	   #jump for the if");
 		
 	}
 

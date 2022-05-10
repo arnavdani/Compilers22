@@ -1,4 +1,5 @@
 package ast;
+import emitter.Emitter;
 import environment.Environment;
 
 /**
@@ -48,6 +49,30 @@ public class BinOp extends Expression
 			return e1.eval(env) - e2.eval(env);
 		else
 			return e1.eval(env) % e2.eval(env);	
+	}
+	
+	public void compile(Emitter e)
+	{
+		e1.compile(e);
+		e.emitPush("$v0");
+		e2.compile(e);
+		e.emitPop("$t0");
+		
+		if(op.equals("+"))
+            e.emit("addu $v0, $v0, $t0");
+		
+        else if(op.equals("-"))
+            e.emit("subu $v0, $v0, $t0");
+        else
+        {
+            if(op.equals("*"))
+                e.emit("mult $v0, $t0");
+            
+            else
+                e.emit("div $t0, $v0");
+            
+            e.emit("mflo $v0");
+        }
 	}
 
 }

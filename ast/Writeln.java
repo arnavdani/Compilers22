@@ -1,5 +1,6 @@
 package ast;
 import environment.Environment;
+import emitter.Emitter;
 
 /**
  * Writeln class simulates a writeln function
@@ -29,5 +30,14 @@ public class Writeln extends Statement
 	public void exec(Environment env)
 	{
 		System.out.println(exp.eval(env));	
+	}
+	
+	public void compile(Emitter e)
+	{
+		exp.compile(e); 
+        e.emit("move $a0, $v0 #Move value into arg register");
+        e.emit("li $v0, 1 #Prepare to print");
+        e.emit("syscall");
+        e.newline();
 	}
 }

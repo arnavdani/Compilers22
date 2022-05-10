@@ -1,5 +1,6 @@
 package ast;
 import environment.Environment;
+import emitter.Emitter;
 
 /**
  * Number class is used to interpret numbers
@@ -27,6 +28,11 @@ public class Number extends Expression
 	public int eval(Environment env) 
 	{
 		return val;
+	}
+	
+	public void compile(Emitter e)
+	{
+		e.emit("li $v0 " + val);
 	}
 
 }

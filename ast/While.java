@@ -1,4 +1,5 @@
 package ast;
+import emitter.Emitter;
 import environment.Environment;
 
 /**
@@ -40,6 +41,17 @@ public class While extends Statement
 			ret = condo.eval(env);
 			
 		}
+		
+	}
+	
+	public void compile(Emitter e)
+	{
+		int i = e.nextLabelID();
+		e.emit("while" + i + ":   #jump for while # " + i);
+		condo.compile(e, "endwhile" + i);
+		stmt1.compile(e);
+		e.emit("j while" + i + " #loop back to top of while");
+		e.emit("endwhile" + i + ": #end of while - continue");
 		
 	}
 

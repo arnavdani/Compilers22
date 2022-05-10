@@ -1,4 +1,5 @@
 package ast;
+import emitter.Emitter;
 import environment.Environment;
 
 /**
@@ -28,5 +29,11 @@ public class Variable extends Expression
 	public int eval(Environment env) 
 	{
 		return env.getVariable(vName);
+	}
+	
+	public void compile(Emitter e)
+	{
+		e.emit("la $t1 var" + vName);
+		e.emit("lw $v0 ($t1)");
 	}
 }

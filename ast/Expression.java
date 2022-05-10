@@ -1,6 +1,7 @@
 package ast;
 
 import environment.Environment;
+import emitter.Emitter;
 /*
  * Expression class is the abstract descriptor
  * for all logical and arithmetic calculations and operations
@@ -14,5 +15,10 @@ public abstract class Expression
 	 * @return integer of the evaluated expression
 	 */
 	public abstract int eval(Environment env);
+	
+	public void compile(Emitter e)
+	{
+		throw new RuntimeException("Implement me!!!!!");
+	}
 	
 }

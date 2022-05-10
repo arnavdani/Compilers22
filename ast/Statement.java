@@ -1,5 +1,6 @@
 package ast;
 import environment.Environment;
+import emitter.Emitter;
 
 /**
  * Statement class is the abstract shell/framework for all
@@ -15,5 +16,10 @@ public abstract class Statement
 	 * @param env the environment in which the statements are executed
 	 */
 	public abstract void exec(Environment env);
+	
+	public void compile(Emitter e)
+	{
+		throw new RuntimeException("Implement me!!!!!");
+	}
 
 }

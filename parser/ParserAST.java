@@ -297,6 +297,22 @@ public class ParserAST
 	 */
 	public Program parseProgram() throws ScanErrorException
 	{
+		List<String> varList = new ArrayList<String>();
+		while(cur.equals("VAR"))
+		{
+			eat("VAR");
+			varList.add(cur);
+			eat(cur);
+			while (!cur.equals("EOL"))
+			{
+				eat(",");
+				varList.add(cur);
+				eat(cur);
+			}
+			eat("EOL");
+		}
+		
+		
 		List<ProcedureDeclaration> procedures = new ArrayList<>();
 		while (cur.equals("PROCEDURE"))
 		{
@@ -318,7 +334,7 @@ public class ParserAST
 			procedures.add(new ProcedureDeclaration(c, statement, params));
 		}
 		Statement statement = parseStatement();
-		return new Program(procedures, statement);
+		return new Program(varList, procedures, statement);
 	}
 }
 

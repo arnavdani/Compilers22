@@ -1,6 +1,7 @@
 package ast;
 import java.util.List;
 
+import emitter.Emitter;
 import environment.Environment;
 
 /**
@@ -37,6 +38,15 @@ public class Block extends Statement
 		{
 			Statement s = stmts.get(i);
 			s.exec(env);
+		}
+	}
+	
+	public void compile(Emitter e)
+	{
+		for (int i = 0; i < stmts.size(); i++)
+		{
+			Statement s = stmts.get(i);
+			s.compile(e);
 		}
 	}
 

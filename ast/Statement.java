@@ -17,6 +17,10 @@ public abstract class Statement
 	 */
 	public abstract void exec(Environment env);
 	
+	/**
+	 * Emits an error if not called by subclass
+	 * @param e Emitter that is writing to file
+	 */
 	public void compile(Emitter e)
 	{
 		throw new RuntimeException("Implement me!!!!!");

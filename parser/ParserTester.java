@@ -25,7 +25,7 @@ public class ParserTester
 	 */
 	public static void main(String [] args) throws FileNotFoundException, ScanErrorException
 	{
-		Scanner sc = new Scanner(new FileInputStream(new File("./src/parserTest1.txt")));
+		Scanner sc = new Scanner(new FileInputStream(new File("./src/parserTest9.txt")));
 		ParserAST p = new ParserAST(sc);
 		Environment env = new Environment(null);
 		Program prog = p.parseProgram();

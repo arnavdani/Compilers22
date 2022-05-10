@@ -283,13 +283,13 @@ public class ParserAST
 	}
 	
 	/**
-	 * ParseProgram reads all the procedures and then the following statements
+	 * ParseProgram reads all the variables procedures and then the following statements
 	 * and uses the program object to store and execute the section of code
 	 * 
 	 * A Program represents all the code comprised of the lower level objects
 	 * Program is the highest level object in the grammar
 	 * 
-	 * Program -> PROCEDURE id ( maybeparms ) ; stmt program | 
+	 * Program -> VAR (id,)* id;| PROCEDURE id ( maybeparms ) ; stmt program | 
 	 * 		stmt . maybeparms -> parms | eps
 	 * 
 	 * @return Program object to be executed/evaluated

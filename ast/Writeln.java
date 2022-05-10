@@ -32,6 +32,19 @@ public class Writeln extends Statement
 		System.out.println(exp.eval(env));	
 	}
 	
+	/**
+	 * Compiles a writeln statement by
+	 * 	writing the MIPS equivalent
+	 * 
+	 * First, the expression within the WriteLN
+	 * is compiled and evaluated,
+	 * Then, the final value is moved into $a0
+	 * 
+	 * Finally, the value is printing using the system commands
+	 * 
+	 * @param E the emitter that emits the final code
+	 */
+	@Override
 	public void compile(Emitter e)
 	{
 		exp.compile(e); 

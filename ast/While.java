@@ -44,10 +44,19 @@ public class While extends Statement
 		
 	}
 	
+	/**
+	 * Compiles while loop by first generating a unique label name
+	 * then follows the common assembly loop structure of label, content, and jump
+	 * compiles the conditional and statement and jumps back to the top of the while
+	 * 	to reevaluate the condition
+	 * 
+	 * If true, the loop continues; if the condition is false, the program jumps to endwhile
+	 * 	and continues with the rest of the code
+	 */
 	public void compile(Emitter e)
 	{
 		int i = e.nextLabelID();
-		e.emit("while" + i + ":   #jump for while # " + i);
+		e.emit("while" + i + ":   #jump for while" + i);
 		condo.compile(e, "endwhile" + i);
 		stmt1.compile(e);
 		e.emit("j while" + i + " #loop back to top of while");

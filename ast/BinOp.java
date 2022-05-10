@@ -51,6 +51,16 @@ public class BinOp extends Expression
 			return e1.eval(env) % e2.eval(env);	
 	}
 	
+	
+	/**
+	 * Compiles a binary op by compiling the left most operation first,
+	 * 	putting it on the stack, and then evaluating the right.
+	 * 
+	 * Depending on the operator, the correct operation happens
+	 * and the value is stored in $t0
+	 * @param e the Emitter that writes the MIPS code
+	 */
+	@Override
 	public void compile(Emitter e)
 	{
 		e1.compile(e);

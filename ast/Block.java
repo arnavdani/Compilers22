@@ -41,6 +41,12 @@ public class Block extends Statement
 		}
 	}
 	
+	/**
+	 * Compiles a block statement by individually compiling
+	 * every individual statement within the block
+	 * @param e Emitter that writes the code
+	 */
+	@Override
 	public void compile(Emitter e)
 	{
 		for (int i = 0; i < stmts.size(); i++)

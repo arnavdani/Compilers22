@@ -18,6 +18,7 @@ public class Program
 	
 	/**
 	 * Constructor for Program Object
+	 * @param names the name of all the declares variables
 	 * @param p list of procedure declarations
 	 * @param st the final statement being executex
 	 */
@@ -43,6 +44,17 @@ public class Program
 		s.exec(e);
 	}
 	
+	/**
+	 * Emits the full program into the MIPS File
+	 * 
+	 * First, a newline variable is defined for future use
+	 * Then, all the variables declared t the top of the PASCAL file
+	 * 	are initialized to 0
+	 * 
+	 * Finally, after writing the .text and .main sections,
+	 * the statement/body of the code is compiled and written to the file
+	 * @param filename the output file where the code is saved to
+	 */
 	public void compile(String filename)
 	{
 		Emitter e = new Emitter(filename);

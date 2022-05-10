@@ -30,6 +30,11 @@ public class Number extends Expression
 		return val;
 	}
 	
+	/**
+	 * Compiles number by putting the value into $v0
+	 * @param e the Emitter that emits the code
+	 */
+	@Override
 	public void compile(Emitter e)
 	{
 		e.emit("li $v0 " + val);

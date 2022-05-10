@@ -34,6 +34,12 @@ public class Assignment extends Statement
 		env.setVariable(var, e.eval(env));
 	}
 	
+	/**
+	 * Compiles assignment statements by loading
+	 * the variable into a temp register
+	 * and then saving the value in $v0 to that variable
+	 * @param e the emitter that writes the code
+	 */
 	public void compile(Emitter em)
 	{
 		e.compile(em);

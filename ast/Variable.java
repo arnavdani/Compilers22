@@ -31,6 +31,13 @@ public class Variable extends Expression
 		return env.getVariable(vName);
 	}
 	
+	/**
+	 * Compiles a variable by loading the variable
+	 * into a temp register then loading its value
+	 * into $v0
+	 * @param e The emitter that writes the code
+	 */
+	@Override
 	public void compile(Emitter e)
 	{
 		e.emit("la $t1 var" + vName);

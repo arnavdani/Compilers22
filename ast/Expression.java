@@ -16,6 +16,10 @@ public abstract class Expression
 	 */
 	public abstract int eval(Environment env);
 	
+	/**
+	 * Returns error if sublcass does not compile
+	 * @param e Emitter that writes to file
+	 */
 	public void compile(Emitter e)
 	{
 		throw new RuntimeException("Implement me!!!!!");

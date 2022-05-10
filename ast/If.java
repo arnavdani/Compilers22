@@ -70,6 +70,17 @@ public class If extends Statement
 		
 	}
 	
+	/**
+	 * Compiles if by compiling the conditional
+	 * If the conditional is met, statement 1 is compiled
+	 * and the program jumps to the end of the if
+	 * 
+	 * otherwise, the program jumps to the elseif label as a part
+	 * 	of the conditional and compiles statement 2 if it is not null
+	 * 
+	 * Finally, the endif label is displayed and the program continues
+	 * @param e The emitter writing the code
+	 */
 	public void compile(Emitter e)
 	{
 		int i = e.nextLabelID();

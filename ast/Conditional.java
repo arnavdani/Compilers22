@@ -32,7 +32,7 @@ public class Conditional extends Expression
 	 * Evaluates relative operations using boolean logic
 	 * works with: == > < >= <= <>
 	 * @param env the environment in which the expression is being evaluated
-	 * @returns an integer 0 or 1 with 0 representing false and 1 true
+	 * @return an integer 0 or 1 with 0 representing false and 1 true
 	 */
 	@Override
 	public int eval(Environment env)
@@ -84,6 +84,20 @@ public class Conditional extends Expression
 		return var;
 	}
 	
+	/**
+	 * Compiles a conditional by evaluating the first expression,
+	 * pushing it onto the stack, evaluating the second, then storing the first in a temp
+	 * 
+	 * Since MIPS is purely top down, the opposite of the true condition being checked
+	 * is used to ensure that the statement after the conditional is the one that should be
+	 * executed if the conditional is true
+	 * 
+	 * For ex, when checking for =, the assembly code checks for bne (not equal)
+	 * 
+	 * If the statement is false, the program should jump to the label
+	 * @param e The emitter that writes the code
+	 * @param tlabel the target label to jump to if the expression is false
+	 */
 	public void compile(Emitter e, String tlabel)
 	{
 		e1.compile(e);
@@ -93,27 +107,27 @@ public class Conditional extends Expression
 		
 		if (op.equals("="))
         {
-            e.emit("bne $t1, $v0, " + tlabel);
+            e.emit("bne $t1, $v0, " + tlabel + "#Conditional Statement");
         }
         else if (op.equals("<>"))
         {
-            e.emit("beq $t1, $v0, " + tlabel);
+            e.emit("beq $t1, $v0, " + tlabel + "#Conditional Statement");
         }
         else if (op.equals("<"))
         {
-            e.emit("bge $t1, $v0, " + tlabel);
+            e.emit("bge $t1, $v0, " + tlabel + "#Conditional Statement");
         }
         else if (op.equals(">"))
         {
-            e.emit("ble $t1, $v0, " + tlabel);
+            e.emit("ble $t1, $v0, " + tlabel + "#Conditional Statement");
         }
         else if (op.equals("<="))
         {
-            e.emit("bgt $t1, $v0, " + tlabel);
+            e.emit("bgt $t1, $v0, " + tlabel + "#Conditional Statement");
         }
         else if (op.equals(">="))
         {
-            e.emit("blt $t1, $v0, " + tlabel);
+            e.emit("blt $t1, $v0, " + tlabel + "#Conditional Statement");
         }
         else
         {

@@ -29,7 +29,7 @@ public class ParserTester
 		ParserAST p = new ParserAST(sc);
 		Environment env = new Environment(null);
 		Program prog = p.parseProgram();
-		prog.compile("emit1.txt");
+		prog.compile("emit.asm");
 	}
 
 }

@@ -58,6 +58,8 @@ public class Program
 	public void compile(String filename)
 	{
 		Emitter e = new Emitter(filename);
+		e.emit("#author Arnav Dani");
+		e.emit("#version 5/11/22");
 		e.emit(".data");
 		e.emit("newline: .asciiz \"\\n\" #defining a newline variable");
 		
